@@ -1,0 +1,61 @@
+﻿@model IEnumerable<LibraryManagementSystem.Models.Loan>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Moje wypożyczenia</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Book)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoanDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReturnDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.Author)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoanDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReturnDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                    @if (item.Status == "Wypożyczona")
+                    {
+                        <a asp-action="Extend" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Przedłuż</a>
+                        <a asp-action="Return" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Zwróć</a>
+                    }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

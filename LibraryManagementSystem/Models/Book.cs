@@ -31,6 +31,6 @@ namespace LibraryManagementSystem.Models
         public int AvailableCopies { get; set; } // Liczba dostępnych egzemplarzy
 
         // Relacja z recenzjami
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }
