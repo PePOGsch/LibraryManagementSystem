@@ -61,7 +61,7 @@ namespace LibraryManagementSystem.Controllers
             var book = await _context.Books.FindAsync(bookId);
             if (book == null || book.AvailableCopies <= 0)
             {
-                return NotFound();
+                return NotFound("Książka niedostępna!");
             }
 
             var loan = new Loan
@@ -80,7 +80,7 @@ namespace LibraryManagementSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,LoanDate,ReturnDate,Status")] Loan loan)
+        public async Task<IActionResult> Create([Bind("BookId,LoanDate,ReturnDate,Status")] Loan loan) //Create(Loan loan)
         {
             var userId = _userManager.GetUserId(User); // Pobierz ID zalogowanego użytkownika
             loan.UserId = userId;
@@ -94,10 +94,13 @@ namespace LibraryManagementSystem.Controllers
             // Zmniejsz liczbę dostępnych egzemplarzy
             book.AvailableCopies -= 1;
 
+            loan.Book = book;
+            loan.Status = "Wypożyczona";
+
             _context.Loans.Add(loan);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Books"); //return RedirectToAction(nameof(Index));
         }
 
         // GET: Loans/Extend/5 (Przedłużenie wypożyczenia)
