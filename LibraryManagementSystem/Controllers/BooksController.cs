@@ -22,9 +22,18 @@ namespace LibraryManagementSystem.Controllers
 
         // GET: Books
         [AllowAnonymous] // Dostęp dla wszystkich
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Books.ToListAsync());
+            var books = from b in _context.Books
+                        select b;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(b => b.Title.Contains(searchString)
+                                       || b.Author.Contains(searchString)
+                                       || b.Genre.Contains(searchString));
+            }
+
+            return View(await books.ToListAsync());
         }
 
         // GET: Books/Details/5

@@ -6,15 +6,20 @@
 
 <h1>Nasze Książki</h1>
 
+<form method="get" asp-action="Index">
+    <div class="form-group">
+        <input type="text" name="searchString" class="form-control" placeholder="Wyszukaj książkę" value="@ViewData["CurrentFilter"]" />
+    </div>
+    <button type="submit" class="btn btn-primary">Szukaj</button>
+</form>
+
 @if (User.IsInRole("Administrator"))
 {
     <p>
         <a asp-action="Create" class="btn btn-primary">Dodaj nową książkę</a>
     </p>
 }
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
+
 <table class="table">
     <thead>
         <tr>
