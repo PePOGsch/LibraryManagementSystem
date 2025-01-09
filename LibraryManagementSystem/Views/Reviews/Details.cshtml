@@ -1,0 +1,12 @@
+﻿@model LibraryManagementSystem.Models.Review
+
+<h1>Recenzja książki: @Model.Book.Title</h1>
+
+<p><strong>Data dodania:</strong> @Model.CreatedAt.ToShortDateString()</p>
+<p><strong>Treść:</strong> @Model.Content</p>
+<p><strong>Ocena:</strong> @Model.Rating/5</p>
+<p><strong>Autor recenzji:</strong> @Model.UserId</p>
+
+<p>
+    <a asp-action="Details" asp-controller="Books" asp-route-id="@Model.BookId" class="btn btn-secondary">Powrót do książki</a>
+</p>

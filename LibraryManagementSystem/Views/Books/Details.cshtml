@@ -11,13 +11,13 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            Tytuł@*@Html.DisplayNameFor(model => model.Title)*@        
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
+            Autor@* @Html.DisplayNameFor(model => model.Author) *@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Author)
@@ -29,32 +29,62 @@
             @Html.DisplayFor(model => model.ISBN)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
+            Gatunek@* @Html.DisplayNameFor(model => model.Genre) *@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Genre)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            Opis@* @Html.DisplayNameFor(model => model.Description) *@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PublisherLink)
+            Strona wydawcy@* @Html.DisplayNameFor(model => model.PublisherLink) *@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PublisherLink)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AvailableCopies)
+            Dostępne Książki@* @Html.DisplayNameFor(model => model.AvailableCopies) *@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.AvailableCopies)
         </dd>
     </dl>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edytuj</a> |
+        <a asp-action="Index">Powrót do listy</a>
+    </div>
+    <hr />
 </div>
+
+
+<h2>Recenzje</h2>
+@if (Model.Reviews != null && Model.Reviews.Any())
+{
+    <ul>
+        @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+        {
+            <li>
+                <strong>Dodano:</strong> @review.CreatedAt.ToShortDateString()<br />
+                <strong>Ocena:</strong> @review.Rating/5<br />
+                <strong>Treść:</strong> @review.Content<br />
+@*                 <a asp-action="Details" asp-controller="Reviews" asp-route-id="@review.Id" class="btn btn-link">Szczegóły recenzji</a> *@
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Brak recenzji dla tej książki.</p>
+}
+
+<p>
+    <a asp-action="Create" asp-controller="Reviews" asp-route-bookId="@Model.Id" class="btn btn-primary">Dodaj recenzję</a>
+</p>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrót do listy</a>
 </div>

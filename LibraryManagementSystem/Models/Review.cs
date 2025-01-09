@@ -11,15 +11,16 @@ namespace LibraryManagementSystem.Models
         [Required]
         [ForeignKey("Book")]
         public int BookId { get; set; }
-        public Book Book { get; set; }
+        [NotMapped]
+        public Book Book { get; set; } = null;
 
         [Required]
         [ForeignKey("User")]
-        public string UserId { get; set; } // Klucz użytkownika z ASP.NET Identity
+        public string? UserId { get; set; } // Klucz użytkownika z ASP.NET Identity
 
         [Required]
         [MaxLength(1000)]
-        public string Content { get; set; } // Treść recenzji
+        public string? Content { get; set; } // Treść recenzji
 
         [Required]
         [Range(1, 5)]

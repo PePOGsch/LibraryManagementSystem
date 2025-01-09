@@ -24,25 +24,28 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Tytuł@* @Html.DisplayNameFor(model => model.Title) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                Autor@* @Html.DisplayNameFor(model => model.Author) *@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ISBN)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Genre)
+                Gatunek@* @Html.DisplayNameFor(model => model.Genre) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Opis@* @Html.DisplayNameFor(model => model.Description) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PublisherLink)
+                Strona wydawcy@* @Html.DisplayNameFor(model => model.PublisherLink) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AvailableCopies)
+                Dostępne Książki@* @Html.DisplayNameFor(model => model.AvailableCopies) *@
+            </th>
+            <th>
+                Opcje
             </th>
             <th></th>
         </tr>
@@ -72,11 +75,11 @@
                 @Html.DisplayFor(modelItem => item.AvailableCopies)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a> 
                     @if (User.IsInRole("Administrator"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
                     }
             </td>
                 <td>

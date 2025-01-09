@@ -129,6 +129,7 @@ namespace LibraryManagementSystem.Controllers
 
             // Zwiększ liczbę dostępnych egzemplarzy książki
             loan.Book.AvailableCopies += 1;
+            loan.ReturnDate = System.DateTime.Now;
 
             loan.Status = "Zwrócona";
             await _context.SaveChangesAsync();
