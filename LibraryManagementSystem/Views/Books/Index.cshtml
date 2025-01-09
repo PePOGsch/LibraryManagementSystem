@@ -89,7 +89,11 @@
                     }
                     else
                     {
-                        <span class="text-danger">Niedostępna</span>
+                        <form asp-controller="Reservations" asp-action="Create" method="post" style="display:inline;">
+                            <input type="hidden" name="bookId" value="@item.Id" />
+                            <button type="submit" class="btn btn-warning btn-sm">Zarezerwuj</button>
+                        </form>
+                        @* <span class="text-danger">Niedostępna</span> *@
                     }
                 </td>
         </tr>

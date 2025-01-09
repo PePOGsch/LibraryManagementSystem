@@ -1,8 +1,48 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "System Zarządzania biblioteką";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="jumbotron text-center">
+    <h1 class="display-4">Witamy w Systemie Zarządzania Biblioteką!</h1>
+    <p class="lead">Twoje centrum wyszukiwania, wypożyczania i recenzowania książek.</p>
+    <hr class="my-4">
+    <p>Odkryj najnowsze książki i dziel się swoimi recenzjami z innymi czytelnikami.</p>
+    <a class="btn btn-primary btn-lg" href="/Books" role="button">Przeglądaj książki</a>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a class="btn btn-secondary btn-lg" href="/Loans" role="button">Moje wypożyczenia</a>
+    }
+    else
+    {
+        <a class="btn btn-secondary btn-lg" href="/Identity/Account/Login" role="button">Zaloguj się</a>
+    }
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center">Funkcjonalności</h2>
+    <div class="row mt-4">
+        <div class="col-md-4 text-center">
+            <h3>Wyszukuj książki</h3>
+            <p>Przeglądaj setki książek dostępnych w naszej bibliotece.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <h3>Wypożyczaj</h3>
+            <p>Wypożyczaj książki bez wychodzenia z domu.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <h3>Dodawaj recenzje</h3>
+            <p>Dziel się swoimi opiniami i pomagaj innym czytelnikom.</p>
+        </div>
+    </div>
+</div>
+<div class="row mt-5 text-center">
+    <div class="col-md-4">
+        <h4>dostępne książki: @Model.BooksCount</h4>
+    </div>
+    <div class="col-md-4">
+        <h4>dodane recenzje: @Model.ReviewsCount</h4>
+    </div>
+    <div class="col-md-4">
+        <h4>zrealizowane wypożyczenia: @Model.LoansCount</h4>
+    </div>
 </div>

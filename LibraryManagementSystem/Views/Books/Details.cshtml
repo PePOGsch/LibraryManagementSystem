@@ -54,6 +54,19 @@
         </dd>
     </dl>
     <div>
+@*     @if (Model.AvailableCopies == 0)
+    {
+        <h4>Książka niedostępna</h4>
+    }
+    else
+    {
+        <form asp-controller="Reservations" asp-action="Create" method="post">
+            <input type="hidden" name="BookId" value="@Model.Id" />
+            <button type="submit" class="btn btn-warning">Zarezerwuj</button>
+        </form>
+    } *@
+    </div>
+    <div>
         <a asp-action="Edit" asp-route-id="@Model?.Id">Edytuj</a> |
         <a asp-action="Index">Powrót do listy</a>
     </div>

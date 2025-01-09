@@ -1,0 +1,33 @@
+﻿@model IEnumerable<LibraryManagementSystem.Models.Reservation>
+
+<h1>Moje Rezerwacje</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Książka</th>
+            <th>Data Rezerwacji</th>
+            <th>Status</th>
+            <th>Opcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reservation in Model)
+        {
+            <tr>
+                <td>@reservation.Book.Title</td>
+                <td>@reservation.ReservationDate.ToShortDateString()</td>
+                <td>@reservation.Status</td>
+                <td>
+                    @if (reservation.Status == "Oczekuje")
+                    {
+                    <form asp-action="Cancel" asp-controller="Reservations" method="post">
+                        <input type="hidden" name="id" value="@reservation.Id" />
+                        <button type="submit" class="btn btn-danger">Anuluj</button>
+                    </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
