@@ -23,23 +23,87 @@ namespace LibraryManagementSystem
 
             var app = builder.Build();
 
+
+
             using (var scope = app.Services.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-                // Tworzenie roli Administrator, je?li nie istnieje
-                if (!await roleManager.RoleExistsAsync("Administrator"))
+                // Tworzenie ról, je?li nie istniej?
+                var roles = new[] { "Administrator", "User" };
+                foreach (var role in roles)
                 {
-                    await roleManager.CreateAsync(new IdentityRole("Administrator"));
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
                 }
 
-                // Dodanie u?ytkownika do roli Administrator
-                var adminEmail = "admin@admin.com"; // Zmie? na e-mail u?ytkownika do przypisania roli
+                // Tworzenie konta administratora
+                var adminEmail = "admin@admin.com";
+                var adminPassword = "Admin@123";
+
                 var adminUser = await userManager.FindByEmailAsync(adminEmail);
-                if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Administrator"))
+                if (adminUser == null)
                 {
-                    await userManager.AddToRoleAsync(adminUser, "Administrator");
+                    adminUser = new IdentityUser
+                    {
+                        UserName = adminEmail,
+                        Email = adminEmail,
+                        EmailConfirmed = true
+                    };
+
+                    var createAdminResult = await userManager.CreateAsync(adminUser, adminPassword);
+                    if (createAdminResult.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(adminUser, "Administrator");
+                        Console.WriteLine("Utworzono konto administratora.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("B??dy podczas tworzenia administratora:");
+                        foreach (var error in createAdminResult.Errors)
+                        {
+                            Console.WriteLine($"- {error.Description}");
+                        }
+                    }
+                }
+
+                // Tworzenie kont testowych
+                var testAccounts = new[]
+                {
+                    new { Email = "test1@library.com", Password = "Test1@123" },
+                    new { Email = "test2@library.com", Password = "Test2@123" }
+                };
+
+                foreach (var account in testAccounts)
+                {
+                    var testUser = await userManager.FindByEmailAsync(account.Email);
+                    if (testUser == null)
+                    {
+                        testUser = new IdentityUser
+                        {
+                            UserName = account.Email,
+                            Email = account.Email,
+                            EmailConfirmed = true
+                        };
+
+                        var createTestUserResult = await userManager.CreateAsync(testUser, account.Password);
+                        if (createTestUserResult.Succeeded)
+                        {
+                            await userManager.AddToRoleAsync(testUser, "User");
+                            Console.WriteLine($"Utworzono konto testowe: {account.Email}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"B??dy podczas tworzenia konta {account.Email}:");
+                            foreach (var error in createTestUserResult.Errors)
+                            {
+                                Console.WriteLine($"- {error.Description}");
+                            }
+                        }
+                    }
                 }
             }
 

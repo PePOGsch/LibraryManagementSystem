@@ -103,7 +103,7 @@ namespace LibraryManagementSystem.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int id, [Bind("Title,Author,ISBN,Genre,Description,PublisherLink,AvailableCopies")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,ISBN,Genre,Description,PublisherLink,AvailableCopies")] Book book)
         {
             if (id != book.Id)
             {

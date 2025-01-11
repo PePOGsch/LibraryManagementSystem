@@ -17,16 +17,30 @@ namespace LibraryManagementSystem.Controllers
         }
 
         // GET: Admin/ManageRoles
-        public IActionResult ManageRoles()
+        public async Task<IActionResult> ManageRoles()
         {
-            var users = _userManager.Users.ToList(); // Pobierz listę użytkowników
-            return View(users);
+            var users = _userManager.Users.ToList();
+            var userRoles = new Dictionary<IdentityUser, IList<string>>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userRoles.Add(user, roles);
+            }
+
+            return View(userRoles); // Przekazanie słownika użytkowników i ich ról do widoku
         }
 
         // POST: Admin/AssignAdminRole
         [HttpPost]
         public async Task<IActionResult> AssignAdminRole(string userId)
         {
+            var currentUserId = _userManager.GetUserId(User); // Pobierz ID aktualnie zalogowanego użytkownika
+            if (userId == currentUserId)
+            {
+                return BadRequest("Nie możesz nadawać uprawnień samemu sobie.");
+            }
+
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
@@ -52,6 +66,12 @@ namespace LibraryManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveAdminRole(string userId)
         {
+            var currentUserId = _userManager.GetUserId(User); // Pobierz ID aktualnie zalogowanego użytkownika
+            if (userId == currentUserId)
+            {
+                return BadRequest("Nie możesz usuwać uprawnień samemu sobie.");
+            }
+
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
@@ -66,5 +86,30 @@ namespace LibraryManagementSystem.Controllers
 
             return RedirectToAction(nameof(ManageRoles));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("Nie znaleziono użytkownika.");
+            }
+
+            // Usuń użytkownika
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                // Loguj błędy, jeśli wystąpiły
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return RedirectToAction(nameof(ManageRoles));
+            }
+
+            return RedirectToAction(nameof(ManageRoles));
+        }
+
     }
 }

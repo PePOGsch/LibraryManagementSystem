@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+﻿@model Dictionary<Microsoft.AspNetCore.Identity.IdentityUser, IList<string>>
 
 <h1>Zarządzanie rolami użytkowników</h1>
 
@@ -6,24 +6,42 @@
     <thead>
         <tr>
             <th>Email</th>
+            <th>Role</th>
             <th>Akcje</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@user.Email</td>
+                <td>@item.Key.Email</td>
+                <td>@string.Join(", ", item.Value)</td>
                 <td>
+                    @if (item.Key.Id != User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
+                    {
                     <form asp-action="AssignAdminRole" method="post" style="display:inline;">
-                        <input type="hidden" name="userId" value="@user.Id" />
-                        <button type="submit" class="btn btn-success btn-sm">Nadaj administratora</button>
+                        <input type="hidden" name="userId" value="@item.Key.Id" />
+                        <button type="submit" class="btn btn-success btn-sm" @(item.Value.Contains("Administrator") ? "disabled" : "")>
+                            Nadaj administratora
+                        </button>
                     </form>
 
                     <form asp-action="RemoveAdminRole" method="post" style="display:inline;">
-                        <input type="hidden" name="userId" value="@user.Id" />
-                        <button type="submit" class="btn btn-danger btn-sm">Usuń administratora</button>
+                        <input type="hidden" name="userId" value="@item.Key.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm" @(!item.Value.Contains("Administrator") ? "disabled" : "")>
+                            Usuń administratora
+                        </button>
                     </form>
+
+                    <form asp-action="DeleteUser" method="post" style="display:inline;">
+                        <input type="hidden" name="userId" value="@item.Key.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń użytkownika </button>
+                    </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Nie możesz zmieniać własnych uprawnień</span>
+                    }
                 </td>
             </tr>
         }
